@@ -76,7 +76,47 @@ class Tree:
         if self.tree[node][1] is not None:
             self.postOrderTraverse(self.tree[node][1])
         print(node)
-
+        
+    def delete(self, name):
+        if name not in self.tree:
+            print('Error: Not in tree!')
+            return
+        if self.tree[name] == (None, None):
+            self.tree.pop(name)
+        elif self.tree[name][0] == None or self.tree[name][1] == None:
+            if self.tree[name][0] == None:
+                child = self.tree[name][1]
+            else:
+                child = self.tree[name][0]
+            for key, value in self.tree.items():
+                if value[0] == name:
+                    self.tree[key] = (child, self.tree[key][1])
+                if value[1] == name:
+                    self.tree[key] = (self.tree[key][0], child)
+            self.tree.pop(name)
+        else:
+            replacement = self.findLargestUnder(name)
+            self.delete(replacement)
+            for key, value in self.tree.items():
+                if value[0] == name:
+                    self.tree[key] = (replacement, self.tree[key][1])
+                if value[1] == name:
+                    self.tree[key] = (self.tree[key][0], replacement)
+            self.tree[replacement] = self.tree[name]
+            self.tree.pop(name)
+        for key, value in self.tree.items():
+            if value[0] == name:
+                self.tree[key] = (None, self.tree[key][1])
+            if value[1] == name:
+                self.tree[key] = (self.tree[key][0], None)
+    def findLargestUnder(self, name):
+        val = self.tree[name][0]
+        lastval = val
+        while val is not None:
+            lastval = val
+            val = self.tree[val][1]
+        return lastval
+            
 if __name__ == '__main__':
     rg = list(range(0,100))
     random.shuffle(rg)
@@ -85,3 +125,49 @@ if __name__ == '__main__':
         tree.add_datapoint(r)
     print(tree)
     tree.inOrderTraverse()
+    tree.delete(60)
+    tree.inOrderTraverse()
+
+
+
+"""
+ENDED - DIDNT FINISH THE TREE - DELETED END
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+"""
