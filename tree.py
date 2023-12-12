@@ -11,7 +11,6 @@ class Tree:
         return str(self.tree)
     
     def force_add_data(self, nodeName, right=None, parent=None, root=False):
-
         if not parent:
             print('Error - no inheritor and no root')
             return -1
@@ -32,7 +31,8 @@ class Tree:
         if len(keys) == 0:
             self.tree[value] = (None, None)
             return self.tree
-        node = keys[0]
+        
+        node = self.getRoot()
         while not placed:
             if value > node:
                 if self.tree[node][1] == None:
@@ -49,10 +49,17 @@ class Tree:
                 if not placed:
                     node = self.tree[node][0]
                 
-                
+    def getRoot(self):
+        for key, value in self.tree.items():
+            for k, v in self.tree.items():
+                if key in v:
+                    break
+            else:
+                return key
+        
     def inOrderTraverse(self, node=None):
         if node is None:
-            node = list(self.tree.keys())[0]
+            node = self.getRoot()
         if self.tree[node][0] is not None:
             self.inOrderTraverse(self.tree[node][0])
         print(node)
@@ -61,7 +68,7 @@ class Tree:
 
     def preOrderTraverse(self, node=None):
         if node is None:
-            node = list(self.tree.keys())[0]
+            node = self.getRoot()
         print(node)
         if self.tree[node][0] is not None:
             self.preOrderTraverse(self.tree[node][0])
@@ -70,7 +77,7 @@ class Tree:
             
     def postOrderTraverse(self, node=None):
         if node is None:
-            node = list(self.tree.keys())[0]
+            node = self.getRoot()
         if self.tree[node][0] is not None:
             self.postOrderTraverse(self.tree[node][0])
         if self.tree[node][1] is not None:
@@ -109,6 +116,7 @@ class Tree:
                 self.tree[key] = (None, self.tree[key][1])
             if value[1] == name:
                 self.tree[key] = (self.tree[key][0], None)
+                
     def findLargestUnder(self, name):
         val = self.tree[name][0]
         lastval = val
@@ -123,51 +131,8 @@ if __name__ == '__main__':
     tree=Tree()
     for r in rg:
         tree.add_datapoint(r)
-    print(tree)
+    base = tree.getRoot()
+    tree.delete(base)
     tree.inOrderTraverse()
-    tree.delete(60)
-    tree.inOrderTraverse()
 
 
-
-"""
-ENDED - DIDNT FINISH THE TREE - DELETED END
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-39
-40
-41
-42
-43
-44
-45
-46
-47
-48
-49
-50
-51
-52
-53
-54
-55
-56
-57
-58
-"""
