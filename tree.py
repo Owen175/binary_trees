@@ -124,7 +124,22 @@ class Tree:
             lastval = val
             val = self.tree[val][1]
         return lastval
-            
+    
+    def search(self, item, node=None, count=1):
+        if node == None:
+            node = self.getRoot()
+        if node == item:
+            return True
+        elif item < node:
+            if self.tree[node][0] == None:
+                return False
+            return self.search(item, node=self.tree[node][0], count=count+1)
+        else:
+            if self.tree[node][1] == None:
+                return False
+            return self.search(item, node=self.tree[node][1], count=count+1)
+
+        
 if __name__ == '__main__':
     rg = list(range(0,100))
     random.shuffle(rg)
@@ -133,6 +148,5 @@ if __name__ == '__main__':
         tree.add_datapoint(r)
     base = tree.getRoot()
     tree.delete(base)
-    tree.inOrderTraverse()
-
+    print(tree.search(3))
 
