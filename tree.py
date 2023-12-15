@@ -1,12 +1,13 @@
 # Binary trees
 import random
 class Tree:
-    def __init__(self, tree=None):
+    def __init__(self, tree=None, numeric=True):
         if tree:
             self.tree = tree
         else:
             self.tree = {}
-            
+        self.numeric = numeric
+        
     def __str__(self):
         return str(self.tree)
     
@@ -25,7 +26,15 @@ class Tree:
             self.tree[parent] = update
         self.tree[nodeName] = (None, None)
         
-    def add_datapoint(self, value: int):
+    def add_datapoint(self, value):
+        if self.numeric:
+            if value.replace(".", "").isnumeric():
+                value = float(value)
+            else:
+                raise Exception("A string cannot be added to a numerical tree")
+        else:
+            value = str(value)
+            
         placed = False
         keys = list(self.tree.keys())
         if len(keys) == 0:
@@ -34,6 +43,9 @@ class Tree:
         
         node = self.getRoot()
         while not placed:
+            if value == node:
+                raise Exception("This value is already in the tree")
+
             if value > node:
                 if self.tree[node][1] == None:
                     self.tree[node] = (self.tree[node][0], value)
@@ -84,6 +96,17 @@ class Tree:
             self.postOrderTraverse(self.tree[node][1])
         print(node)
         
+    def breadthFirstTraverse(self):
+        queue = [self.getRoot()]
+        while len(queue) != 0:
+            node = queue.pop(0)
+            print(node)
+            if self.tree[node][0] != None:
+                queue.append(self.tree[node][0])
+            if self.tree[node][1] != None:
+                queue.append(self.tree[node][1])
+            
+            
     def delete(self, name):
         if name not in self.tree:
             print('Error: Not in tree!')
@@ -142,11 +165,11 @@ class Tree:
         
 if __name__ == '__main__':
     rg = list(range(0,100))
+    rg = ['1', 'g', 'a', 'b', 'A', 'B', 'c', 'P']
     random.shuffle(rg)
-    tree=Tree()
+    tree=Tree(numeric=False)
     for r in rg:
         tree.add_datapoint(r)
     base = tree.getRoot()
-    tree.delete(base)
-    print(tree.search(3))
+    tree.inOrderTraverse()
 
